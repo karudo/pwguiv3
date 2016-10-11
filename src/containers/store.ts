@@ -9,8 +9,8 @@ const reducers = (x: number): number => x;
 const recoverState = () => ({});
 
 export const store = createStore(
-    reducers,
-    recoverState(),
-    window.devToolsExtension && window.devToolsExtension()
+  reducers,
+  recoverState(),
+  window.devToolsExtension && window.devToolsExtension()
 );
 
