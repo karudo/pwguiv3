@@ -2,7 +2,6 @@ import * as React from 'react';
 import Qwe from './qwe';
 //import {createStore, applyMiddleware, combineReducers} from 'redux';
 
-import './test';
 
 
 class App extends React.Component<{}, {num: number}> {
