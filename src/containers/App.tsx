@@ -1,40 +1,32 @@
 import * as React from 'react';
+import {autoBindMethod} from '../decorators/autoBindMethod';
 import Qwe from './qwe';
-//import {createStore, applyMiddleware, combineReducers} from 'redux';
 
-//import {connect} from './connect';
+// import {createStore, applyMiddleware, combineReducers} from 'redux';
 
+// import {connect} from './connect';
 
-
-//type P = {};
-//type S = {};
-
-/*
-@connect<P, S>()
-class Zxc extends React.Component<P, S> {
-  render() {
-    return <span>qwe</span>;
-  }
-}
-*/
-
-import './connect';
+// import './connect';
 
 class App extends React.Component<{}, {num: number}> {
   constructor(...args: any[]) {
     super(...args);
     this.state = {
-      num: 0
+      num: 0,
     };
   }
-  render() {
-    const num = this.state.num;
 
+  @autoBindMethod
+  private handleButtonClick() {
+    this.setState({num: this.state.num + 1});
+  }
+
+  public render() {
     return (
       <div>
-        <button onClick={() => this.setState({num: num + 1})}>ok</button>
+        <button onClick={this.handleButtonClick}>ok</button>
         hello!!!!
-        <Qwe num={num} />
+        <Qwe num={this.state.num} />
       </div>
     );
   }

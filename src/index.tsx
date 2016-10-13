@@ -34,6 +34,6 @@ if (module.hot) {
          <NextApp />
       </AppContainer>,
       rootEl
-    )
-  })
+    );
+  });
 }
