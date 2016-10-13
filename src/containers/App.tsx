@@ -2,7 +2,23 @@ import * as React from 'react';
 import Qwe from './qwe';
 //import {createStore, applyMiddleware, combineReducers} from 'redux';
 
+//import {connect} from './connect';
 
+
+
+//type P = {};
+//type S = {};
+
+/*
+@connect<P, S>()
+class Zxc extends React.Component<P, S> {
+  render() {
+    return <span>qwe</span>;
+  }
+}
+*/
+
+import './connect';
 
 class App extends React.Component<{}, {num: number}> {
   constructor(...args: any[]) {

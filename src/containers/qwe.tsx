@@ -1,16 +1,19 @@
 import * as React from 'react'
 
-function pwconnect(a: any): any {
-  return a;
+function connect(pr: {}) {
+  return function (z: React.Component) {
+
+  };
 }
 
-function zxc(): any {
-  return 1;
+class Zxc extends React.Component<{}, {}> {
+  render() {
+    return <div>q</div>;
+  }
 }
 
-@pwconnect({
-  lenta: zxc()
-})
+let z = connect({})(Zxc);
+
 class Qwe extends React.Component<{num: number}, null> {
   render() {
     return (
