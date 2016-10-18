@@ -8,11 +8,9 @@
     "start": "node server.js"
   },
   "devDependencies": {
-    "@types/node": "6.0.45",
     "@types/react": "0.14.41",
     "@types/react-dom": "0.14.18",
     "@types/react-redux": "^4.4.32",
-    "@types/requirejs": "2.1.28",
     "babel-core": "6.17.0",
     "babel-loader": "6.2.5",
     "babel-preset-es2015": "6.16.0",
