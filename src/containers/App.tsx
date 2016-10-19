@@ -4,9 +4,7 @@ import Qwe from './qwe';
 
 // import {createStore, applyMiddleware, combineReducers} from 'redux';
 
-// import {connect} from './connect';
-
-// import './connect';
+import {connect} from './connect';
 
 class App extends React.Component<{}, {num: number}> {
   constructor(...args: any[]) {
@@ -14,6 +12,7 @@ class App extends React.Component<{}, {num: number}> {
     this.state = {
       num: 0,
     };
+    connect();
   }
 
   @autoBindMethod

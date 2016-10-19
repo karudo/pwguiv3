@@ -21,12 +21,14 @@ module.exports = {
     modulesDirectories: ['src', 'node_modules']
   },
   module: {
+    /*
     preLoaders: [
       {
         test: /\.tsx?$/,
         loader: 'tslint'
       }
     ],
+    */
     loaders: [
       { test: /\.tsx?$/, loaders: ['babel', 'ts-loader'] }
     ]
