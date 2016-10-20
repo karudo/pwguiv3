@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {autoBindMethod} from '../decorators/autoBindMethod';
 import Qwe from './qwe';
 
 // import {createStore, applyMiddleware, combineReducers} from 'redux';
@@ -12,10 +11,9 @@ class App extends React.Component<{}, {num: number}> {
     this.state = {
       num: 0,
     };
-    connect();
+    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
-  @autoBindMethod
   private handleButtonClick() {
     this.setState({num: this.state.num + 1});
   }
