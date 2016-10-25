@@ -5,6 +5,8 @@ import Qwe from './qwe';
 
 import {connect} from './connect';
 
+const z: number = connect();
+
 class App extends React.Component<{}, {num: number}> {
   constructor(...args: any[]) {
     super(...args);
@@ -21,7 +23,7 @@ class App extends React.Component<{}, {num: number}> {
   public render() {
     return (
       <div>
-        <button onClick={this.handleButtonClick}>ok</button>
+        <button onClick={this.handleButtonClick}>&gt;&gt; ok &lt;&lt;</button>
         hello!!!!
         <Qwe num={this.state.num} />
       </div>

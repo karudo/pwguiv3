@@ -20,5 +20,11 @@ export function connect<P, S>(props?: any) {
 */
 
 export function connect() {
+  class Hui extends React.Component<{}, {}> {
+    render() {
+      return React.createElement('div', {}, 'text222' as React.ReactNode);
+    }
+  }
 
+  return Hui;
 }
