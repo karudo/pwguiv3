@@ -10,7 +10,11 @@
     "outDir": "ts-build",
     "jsx": "preserve",
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
   },
   "exclude": [
     "node_modules"
