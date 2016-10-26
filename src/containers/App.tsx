@@ -5,7 +5,7 @@ import Qwe from './qwe';
 
 import {connect} from './connect';
 
-const z: number = connect();
+const Zcc = connect();
 
 class App extends React.Component<{}, {num: number}> {
   constructor(...args: any[]) {
@@ -26,6 +26,7 @@ class App extends React.Component<{}, {num: number}> {
         <button onClick={this.handleButtonClick}>&gt;&gt; ok &lt;&lt;</button>
         hello!!!!
         <Qwe num={this.state.num} />
+        <Zcc/>
       </div>
     );
   }
