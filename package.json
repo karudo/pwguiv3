@@ -9,11 +9,11 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.37",
-    "@types/react": "0.14.42",
+    "@types/react": "0.14.43",
     "@types/react-dom": "0.14.18",
     "@types/react-redux": "4.4.32",
     "babel-core": "6.18.0",
-    "babel-loader": "6.2.5",
+    "babel-loader": "6.2.7",
     "babel-preset-es2015": "6.18.0",
     "babel-preset-react": "6.16.0",
     "babel-preset-stage-0": "6.16.0",
@@ -25,7 +25,7 @@
     "tslint-loader": "^2.1.5",
     "tslint-react": "^1.1.0",
     "typescript": "2.0.6",
-    "webpack": "1.13.2",
+    "webpack": "1.13.3",
     "webpack-dev-server": "1.16.2",
     "webpack-notifier": "1.4.1"
   },
