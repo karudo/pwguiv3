@@ -5,7 +5,7 @@ import Qwe from './qwe';
 
 import {connect} from './connect';
 
-const Zcc = connect();
+const Zcc = connect({})();
 
 class App extends React.Component<{}, {num: number}> {
   constructor(...args: any[]) {
