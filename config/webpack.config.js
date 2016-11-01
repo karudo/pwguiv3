@@ -6,9 +6,9 @@ module.exports = {
   devtool: 'eval',
   entry: [
     // Add the react hot loader entry point - in reality, you might only want this in your dev config
-    'react-hot-loader/patch',
+    //'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
+    'webpack/hot/dev-server',
     'index.tsx'
   ],
   output: {

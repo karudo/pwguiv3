@@ -1,15 +1,11 @@
 import * as React from 'react';
 import Qwe from './qwe';
 
-// import {createStore, applyMiddleware, combineReducers} from 'redux';
-
-import {connect} from './connect';
-
-const Zcc = connect({})();
+import Zcc from './Zcc';
 
 class App extends React.Component<{}, {num: number}> {
-  constructor(...args: any[]) {
-    super(...args);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       num: 0,
     };
