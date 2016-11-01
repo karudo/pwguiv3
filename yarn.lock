@@ -17,9 +17,13 @@
     "@types/react" "*"
     "@types/redux" "*"
 
-"@types/react@*", "@types/react@0.14.43":
+"@types/react@*":
   version "0.14.43"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-0.14.43.tgz#480090c8cc3d3ebd18f6c1f3a5b039c593bdd39a"
+
+"@types/react@0.14.44":
+  version "0.14.44"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-0.14.44.tgz#033f0b63691b489adfce2397c93d8bcafe7f7356"
 
 "@types/redux@*", "@types/redux@^3.6.31":
   version "3.6.31"
