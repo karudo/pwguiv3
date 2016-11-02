@@ -1,10 +1,8 @@
 import {Component, PropTypes, Children, ReactNode} from 'react';
 
-import {Store} from 'redux';
-
 import storeShape from './storeShape';
 
-class Provider extends Component<{store: any, children: any}, null> {
+class Provider extends Component<{store: any}, null> {
   public static propTypes;
   public static childContextTypes;
   public static displayName: string;
@@ -15,29 +13,30 @@ class Provider extends Component<{store: any, children: any}, null> {
     };
   }
   public render() {
-    return Children.only(this.props.children);
+    return Children.only(this.props.children as ReactNode);
   }
 }
 
 declare const process: any;
 
 if (process.env.NODE_ENV !== 'production') {
-  Provider.prototype.componentWillReceiveProps = function (nextProps) {
+  // tslint:disable-next-line
+  Provider.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
     const {store} = this;
     const {store: nextStore} = nextProps;
 
     if (store !== nextStore) {
       console.log('warn');
     }
-  }
+  };
 }
 
 Provider.propTypes = {
   store: storeShape,
-  children: PropTypes.element.isRequired
+  children: PropTypes.element.isRequired,
 };
 Provider.childContextTypes = {
-  store: storeShape
+  store: storeShape,
 };
 Provider.displayName = 'Provider';
 
