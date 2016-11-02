@@ -2,11 +2,9 @@ import {Component, PropTypes, Children, ReactNode} from 'react';
 
 import {Store} from 'redux';
 
-type AnyStore = Store<any>
-
 import storeShape from './storeShape';
 
-class Provider extends Component<{store: AnyStore}, null> {
+class Provider extends Component<{store: any, children: any}, null> {
   public static propTypes;
   public static childContextTypes;
   public static displayName: string;
@@ -17,7 +15,7 @@ class Provider extends Component<{store: AnyStore}, null> {
     };
   }
   public render() {
-    return Children.only(this.props.children as ReactNode)
+    return Children.only(this.props.children);
   }
 }
 
