@@ -2,16 +2,31 @@ import {Component, PropTypes, Children, ReactNode} from 'react';
 
 import storeShape from './storeShape';
 
-class Provider extends Component<{store: any}, null> {
-  public static propTypes: any;
-  public static childContextTypes: any;
-  public static displayName: string;
+class Provider extends Component<{store: any, storeKey?: string}, null> {
+  public static defaultProps = {
+    storeKey: 'store',
+  };
+
+  public static propTypes = {
+    store: storeShape.isRequired,
+    storeKey: PropTypes.string,
+    children: PropTypes.element.isRequired,
+  };
+
+  public static childContextTypes = {
+    store: storeShape.isRequired,
+  };
+
+  public static displayName = 'Provider';
+
   public componentWillReceiveProps: any;
+
   public getChildContext() {
     return {
-      store: this.props.store,
+      [this.props.storeKey as string]: this.props.store,
     };
   }
+
   public render() {
     return Children.only(this.props.children as ReactNode);
   }
@@ -28,14 +43,5 @@ if (process.env.NODE_ENV !== 'production') {
     }
   };
 }
-
-Provider.propTypes = {
-  store: storeShape,
-  children: PropTypes.element.isRequired,
-};
-Provider.childContextTypes = {
-  store: storeShape,
-};
-Provider.displayName = 'Provider';
 
 export default Provider;

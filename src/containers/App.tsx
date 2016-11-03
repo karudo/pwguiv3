@@ -17,12 +17,13 @@ class App extends React.Component<{}, {num: number}> {
   }
 
   public render() {
+    const {num} = this.state;
     return (
       <div>
         <button onClick={this.handleButtonClick}>&gt;&gt; ok &lt;&lt;</button>
         hello!!!!
-        <Qwe num={this.state.num} />
-        <Zcc type={this.state.num}/>
+        <Qwe num={num} />
+        <Zcc type={num}/>
       </div>
     );
   }

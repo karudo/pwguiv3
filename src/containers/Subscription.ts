@@ -64,7 +64,7 @@ class Subscription {
   private onStateChange: VoidFunction;
   private listeners: ListenerCollection;
 
-  constructor(store: AnyStore, parentSub: Subscription) {
+  constructor(store: AnyStore, parentSub?: Subscription) {
     this.subscribe = parentSub
       ? parentSub.addNestedSub.bind(parentSub)
       : store.subscribe.bind(store);

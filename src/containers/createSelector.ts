@@ -5,10 +5,11 @@ export type TypeSelector = {
   error?: string
 };
 
-export function createSelector(sourceSelector: any, getState: any, initProps: any) {
+export function createSelector(sourceSelector: any, getState: () => any, initProps: {}): TypeSelector {
   const selector: TypeSelector = {
     shouldComponentUpdate: true,
     props: sourceSelector(getState(), initProps),
+    // tslint:disable-next-line
     run: function runComponentSelector(currentProps) {
       try {
         const nextProps = sourceSelector(getState(), currentProps);

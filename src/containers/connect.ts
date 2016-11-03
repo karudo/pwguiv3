@@ -5,9 +5,9 @@ import {Store} from 'redux';
 
 import storeShape from './storeShape';
 
-import * as renders from './connectRenders';
+// import * as renders from './connectRenders';
 
-import Subscription from './Subscription'
+import Subscription from './Subscription';
 
 import {createSelector, TypeSelector} from './createSelector';
 
@@ -45,15 +45,7 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
   const subscriptionKey = storeKey + 'Subscription';
   const version = hotReloadingVersion++;
 
-  const contextTypes = {
-    [storeKey]: storeShape.isRequired,
-    [subscriptionKey]: PropTypes.instanceOf(Subscription)
-  };
-
-  const childContextTypes = {
-    [subscriptionKey]: PropTypes.instanceOf(Subscription)
-  };
-
+  // tslint:disable-next-line:only-arrow-functions
   return function wrapWithConnect(WrappedComponent: any) {
     class Connect extends Component<ParentProps, ConnectState> {
       static contextTypes: any;
@@ -61,17 +53,17 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
 
       private selector: TypeSelector;
       private version: number;
-      private renderCount: number = 0;
+      // private renderCount: number = 0;
       private store: PWStore;
 
       private subscription: Subscription;
-      private parentSub: Subscription;
+      private parentSub?: Subscription;
 
       public context: {
         [index: string]: any
       };
 
-      constructor(props: null, context: null) {
+      constructor(props: ParentProps, context: {}) {
         super(props, context);
         this.version = version;
         this.state = {
@@ -92,7 +84,7 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
 
       public componentWillUpdate: any;
 
-      private componentDidMount() {
+      public componentDidMount() {
         if (!shouldHandleStateChanges) {
           return;
         }
@@ -103,24 +95,22 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
         }
       }
 
-      private componentWillReceiveProps(nextProps: ParentProps) {
+      public componentWillReceiveProps(nextProps: ParentProps) {
         this.selector.run(nextProps);
       }
 
-      private shouldComponentUpdate() {
+      public shouldComponentUpdate() {
         return this.selector.shouldComponentUpdate;
       }
 
-      componentWillUnmount() {
+      public componentWillUnmount() {
         if (this.subscription) {
           this.subscription.tryUnsubscribe();
         }
-        // these are just to guard against extra memory leakage if a parent element doesn't
-        // dereference this instance properly, such as an async callback that never finishes
         this.subscription = null as any;
         this.store = null as any;
         this.parentSub = null as any;
-        this.selector.run = () => {};
+        this.selector.run = () => ({});
       }
 
       private initSelector() {
@@ -158,10 +148,16 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
       }
     }
 
-    Connect.contextTypes = contextTypes;
-    Connect.childContextTypes = childContextTypes;
+    Connect.contextTypes = {
+      [storeKey]: storeShape.isRequired,
+      [subscriptionKey]: PropTypes.instanceOf(Subscription),
+    };
+    Connect.childContextTypes = {
+      [subscriptionKey]: PropTypes.instanceOf(Subscription).isRequired,
+    };
 
     if (process.env.NODE_ENV !== 'production') {
+      // tslint:disable-next-line
       Connect.prototype.componentWillUpdate = function componentWillUpdate() {
         // We are hot reloading!
         if (this.version !== version) {

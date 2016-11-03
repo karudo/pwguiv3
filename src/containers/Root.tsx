@@ -16,4 +16,3 @@ class Root extends React.Component<null, null> {
 }
 
 export default Root;
-
