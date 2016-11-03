@@ -4,7 +4,7 @@ import Qwe from './qwe';
 import Zcc from './Zcc';
 
 class App extends React.Component<{}, {num: number}> {
-  constructor(props, context) {
+  constructor(props: any, context: any) {
     super(props, context);
     this.state = {
       num: 0,
@@ -22,7 +22,7 @@ class App extends React.Component<{}, {num: number}> {
         <button onClick={this.handleButtonClick}>&gt;&gt; ok &lt;&lt;</button>
         hello!!!!
         <Qwe num={this.state.num} />
-        <Zcc/>
+        <Zcc type={this.state.num}/>
       </div>
     );
   }

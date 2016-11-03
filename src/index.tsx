@@ -2,13 +2,13 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 // Import the Hot Module Reloading App Container – more on why we use 'require' below
-//const { AppContainer } = require('react-hot-loader');
+// const { AppContainer } = require('react-hot-loader');
 
 // Import our App container (which we will create in a second)
 import Root from './containers/Root';
 
 // Tell Typescript that there is a global variable called module - see below
-//declare let module: { hot: any };
+// declare let module: { hot: any };
 
 // Get our root element
 const rootEl = document.getElementById('app');

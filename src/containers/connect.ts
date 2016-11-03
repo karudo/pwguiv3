@@ -1,5 +1,5 @@
 import {createElement, Component, PropTypes} from 'react';
-//import _ from 'lodash';
+import _ from 'lodash';
 
 import {Store} from 'redux';
 
@@ -26,7 +26,17 @@ type ConnectSettings = {
 
 let hotReloadingVersion = 0;
 
-export function connect(settings: ConnectSettings) {
+export class Connector {
+  constructor(private s: number) {
+
+  }
+}
+
+type ConnectorsObject = {
+  [key: string]: Connector
+};
+
+export function connect<ParentProps>(connectors: ConnectorsObject, settings: ConnectSettings = {}) {
   const {
     storeKey = 'store',
     shouldHandleStateChanges = true,
@@ -44,10 +54,10 @@ export function connect(settings: ConnectSettings) {
     [subscriptionKey]: PropTypes.instanceOf(Subscription)
   };
 
-  return function wrapWithConnect(WrappedComponent) {
-    class Connect extends Component<{}, ConnectState> {
-      static contextTypes;
-      static childContextTypes;
+  return function wrapWithConnect(WrappedComponent: any) {
+    class Connect extends Component<ParentProps, ConnectState> {
+      static contextTypes: any;
+      static childContextTypes: any;
 
       private selector: TypeSelector;
       private version: number;
@@ -57,11 +67,15 @@ export function connect(settings: ConnectSettings) {
       private subscription: Subscription;
       private parentSub: Subscription;
 
-      constructor(props, context) {
+      public context: {
+        [index: string]: any
+      };
+
+      constructor(props: null, context: null) {
         super(props, context);
         this.version = version;
         this.state = {
-          render: false
+          render: false,
         };
         this.store = this.context[storeKey];
         this.parentSub = this.context[subscriptionKey];
@@ -70,14 +84,43 @@ export function connect(settings: ConnectSettings) {
         this.initSubscription();
       }
 
-      private componentDidMount() {
-        this.subscription.trySubscribe();
-        this.selector.run(this.props);
-        if (this.selector.shouldComponentUpdate) this.forceUpdate()
+      getChildContext() {
+        return {
+          [subscriptionKey]: this.subscription,
+        };
       }
 
-      private componentWillReceiveProps(nextProps) {
+      public componentWillUpdate: any;
+
+      private componentDidMount() {
+        if (!shouldHandleStateChanges) {
+          return;
+        }
+        this.subscription.trySubscribe();
+        this.selector.run(this.props);
+        if (this.selector.shouldComponentUpdate) {
+          this.forceUpdate();
+        }
+      }
+
+      private componentWillReceiveProps(nextProps: ParentProps) {
         this.selector.run(nextProps);
+      }
+
+      private shouldComponentUpdate() {
+        return this.selector.shouldComponentUpdate;
+      }
+
+      componentWillUnmount() {
+        if (this.subscription) {
+          this.subscription.tryUnsubscribe();
+        }
+        // these are just to guard against extra memory leakage if a parent element doesn't
+        // dereference this instance properly, such as an async callback that never finishes
+        this.subscription = null as any;
+        this.store = null as any;
+        this.parentSub = null as any;
+        this.selector.run = () => {};
       }
 
       private initSelector() {
@@ -89,7 +132,6 @@ export function connect(settings: ConnectSettings) {
       private initSubscription() {
         if (shouldHandleStateChanges) {
           const subscription = this.subscription = new Subscription(this.store, this.parentSub);
-          const notifyNestedSubs = subscription.notifyNestedSubs.bind(subscription);
           const dummyState = {} as ConnectState;
 
           subscription.setOnStateChange(() => {
@@ -98,23 +140,46 @@ export function connect(settings: ConnectSettings) {
             if (!this.selector.shouldComponentUpdate) {
               subscription.notifyNestedSubs();
             } else {
-              this.setState(dummyState, notifyNestedSubs);
+              this.setState(dummyState, () => subscription.notifyNestedSubs());
             }
           });
         }
       }
 
       public render() {
-        if (this.state.render) {
-          return renders[this.state.render]();
-        }
+        const selector = this.selector;
+        selector.shouldComponentUpdate = false;
 
-        return createElement(WrappedComponent, {qwe: this.state.render});
+        if (selector.error) {
+          throw selector.error;
+        } else {
+          return createElement(WrappedComponent, _.extend({}, this.props));
+        }
       }
     }
 
     Connect.contextTypes = contextTypes;
     Connect.childContextTypes = childContextTypes;
+
+    if (process.env.NODE_ENV !== 'production') {
+      Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+        // We are hot reloading!
+        if (this.version !== version) {
+          this.version = version;
+          this.initSelector();
+
+          if (this.subscription) {
+            this.subscription.tryUnsubscribe();
+          }
+
+          this.initSubscription();
+          if (shouldHandleStateChanges) {
+            this.subscription.trySubscribe();
+          }
+        }
+      };
+    }
+
     return Connect;
   };
 }

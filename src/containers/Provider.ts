@@ -3,8 +3,8 @@ import {Component, PropTypes, Children, ReactNode} from 'react';
 import storeShape from './storeShape';
 
 class Provider extends Component<{store: any}, null> {
-  public static propTypes;
-  public static childContextTypes;
+  public static propTypes: any;
+  public static childContextTypes: any;
   public static displayName: string;
   public componentWillReceiveProps: any;
   public getChildContext() {
@@ -17,11 +17,9 @@ class Provider extends Component<{store: any}, null> {
   }
 }
 
-declare const process: any;
-
 if (process.env.NODE_ENV !== 'production') {
   // tslint:disable-next-line
-  Provider.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+  Provider.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps: any) {
     const {store} = this;
     const {store: nextStore} = nextProps;
 

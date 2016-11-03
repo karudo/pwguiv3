@@ -5,10 +5,10 @@ export type TypeSelector = {
   error?: string
 };
 
-export function createSelector(sourceSelector, getState, props) {
+export function createSelector(sourceSelector: any, getState: any, initProps: any) {
   const selector: TypeSelector = {
     shouldComponentUpdate: true,
-    props: sourceSelector(getState(), props),
+    props: sourceSelector(getState(), initProps),
     run: function runComponentSelector(currentProps) {
       try {
         const nextProps = sourceSelector(getState(), currentProps);
@@ -19,9 +19,9 @@ export function createSelector(sourceSelector, getState, props) {
         }
       } catch (error) {
         selector.shouldComponentUpdate = true;
-        selector.error = error
+        selector.error = error;
       }
-    }
+    },
   };
   return selector;
 }

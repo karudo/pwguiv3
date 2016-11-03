@@ -10,8 +10,8 @@ type AnyStore = Store<any>;
 type VoidFunction = () => void;
 
 type ListenerCollection = {
-  clear: () => void;
-  notify: () => void;
+  clear: VoidFunction;
+  notify: VoidFunction;
   subscribe: (listener: VoidFunction) => VoidFunction
 }
 
@@ -36,7 +36,7 @@ function createListenerCollection(): ListenerCollection {
       }
     },
 
-    subscribe(listener) {
+    subscribe(listener: VoidFunction) {
       let isSubscribed = true;
       if (next === current) {
         next = current.slice();
@@ -76,7 +76,7 @@ class Subscription {
     this.onStateChange = fun;
   }
 
-  addNestedSub(listener) {
+  addNestedSub(listener: VoidFunction) {
     this.trySubscribe();
     return this.listeners.subscribe(listener);
   }

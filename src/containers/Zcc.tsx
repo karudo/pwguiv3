@@ -1,11 +1,21 @@
 import * as React from 'react';
-import {connect} from './connect';
+import {connect, Connector} from './connect';
+import {mapValues} from 'lodash';
 
-@connect({})
-class ZccCom extends React.Component<{}, {}> {
+type ParentProps = {
+  type: number
+};
+
+type CurrentProps = {
+  qwe: string
+};
+
+class ZccCom extends React.Component<ParentProps & CurrentProps, {}> {
   render() {
     return <div>ZccCom!</div>;
   }
 }
 
-export default ZccCom;
+export default connect<ParentProps>({
+  hui: new Connector(4),
+})(ZccCom);
