@@ -1,4 +1,5 @@
-import {createElement, Component, PropTypes} from 'react';
+import * as React from 'react';
+const {createElement, Component, PropTypes} = React;
 import _ from 'lodash';
 
 import {Store} from 'redux';
@@ -27,10 +28,34 @@ type ConnectSettings = {
 let hotReloadingVersion = 0;
 
 export class Connector {
-  constructor(private s: number) {
+  constructor(public s: number) {
 
   }
 }
+export class Connector1 {
+  constructor(public a: number) {
+
+  }
+}
+
+const z = {
+  qwe: () => new Connector(1),
+  zxc: () => new Connector1(6)
+};
+
+type TypeOfZ = {
+  qwe: () => Connector,
+  zxc: () => Connector1
+};
+
+type MapRes = {
+  qwe: Connector,
+  zxc: Connector1
+};
+
+//type d = (x: TypeOfZ): MapRes => x();
+const ccc: MapRes = _.mapValues(z, (x) => x());
+console.log(ccc)
 
 type ConnectorsObject = {
   [key: string]: Connector
@@ -143,7 +168,7 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
         if (selector.error) {
           throw selector.error;
         } else {
-          return createElement(WrappedComponent, _.extend({}, this.props));
+          return <WrappedComponent ddd={1} />;
         }
       }
     }
