@@ -35,10 +35,7 @@ class Provider extends Component<{store: any, storeKey?: string}, null> {
 if (process.env.NODE_ENV !== 'production') {
   // tslint:disable-next-line
   Provider.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps: any) {
-    const {store} = this;
-    const {store: nextStore} = nextProps;
-
-    if (store !== nextStore) {
+    if (this.store !== nextProps.store) {
       console.log('warn');
     }
   };
