@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {connect, Connector} from './connect';
+import {connect} from './connect';
 // import {mapValues} from 'lodash';
 
 type ParentProps = {
@@ -17,5 +17,5 @@ class ZccCom extends React.Component<ParentProps & CurrentProps, {}> {
 }
 
 export default connect<ParentProps>({
-  hui: new Connector(4),
+  // hui: 1 // new Connector(4),
 })(ZccCom);

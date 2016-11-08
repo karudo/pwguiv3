@@ -1,8 +1,6 @@
 import * as React from 'react';
 const {Component, PropTypes} = React;
-import _ from 'lodash';
-
-import {Store} from 'redux';
+import {isEqual} from 'lodash';
 
 import storeShape from './storeShape';
 
@@ -12,13 +10,7 @@ import Subscription from './Subscription';
 
 import {createSelector, TypeSelector} from './createSelector';
 
-type PWState = {};
-
-type PWStore = Store<PWState>;
-
-type ConnectState = {
-  render: false | string,
-};
+import {TPWStore, TConnectorsObject} from '../kernel/baseTypes';
 
 type ConnectSettings = {
   storeKey?: string,
@@ -27,17 +19,7 @@ type ConnectSettings = {
 
 let hotReloadingVersion = 0;
 
-export class Connector {
-  constructor(public s: number) {
-
-  }
-}
-
-type ConnectorsObject = {
-  [key: string]: Connector
-};
-
-export function connect<ParentProps>(connectors: ConnectorsObject, settings: ConnectSettings = {}) {
+export function connect<TOwnProps>(connectors: TConnectorsObject, settings: ConnectSettings = {}) {
   const {
     storeKey = 'store',
     shouldHandleStateChanges = true,
@@ -48,14 +30,14 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
 
   // tslint:disable-next-line:only-arrow-functions
   return function wrapWithConnect(WrappedComponent: any) {
-    class Connect extends Component<ParentProps, ConnectState> {
+    class Connect extends Component<TOwnProps, {}> {
       static contextTypes: any;
       static childContextTypes: any;
 
-      private selector: TypeSelector;
+      private selector: TypeSelector<TOwnProps>;
       private version: number;
       // private renderCount: number = 0;
-      private store: PWStore;
+      private store: TPWStore;
 
       private subscription: Subscription;
       private parentSub?: Subscription;
@@ -64,12 +46,9 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
         [index: string]: any
       };
 
-      constructor(props: ParentProps, context: {}) {
+      constructor(props: TOwnProps, context: {}) {
         super(props, context);
         this.version = version;
-        this.state = {
-          render: false,
-        };
         this.store = this.context[storeKey];
         this.parentSub = this.context[subscriptionKey];
 
@@ -91,13 +70,15 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
         }
         this.subscription.trySubscribe();
         this.selector.run(this.props);
-        if (this.selector.shouldComponentUpdate) {
-          this.forceUpdate();
-        }
+        // if (this.selector.shouldComponentUpdate) {
+        //  this.forceUpdate();
+        // }
       }
 
-      public componentWillReceiveProps(nextProps: ParentProps) {
-        this.selector.run(nextProps);
+      public componentWillReceiveProps(nextProps: TOwnProps) {
+        if (!isEqual(nextProps, this.props)) {
+          this.selector.run(nextProps);
+        }
       }
 
       public shouldComponentUpdate() {
@@ -115,23 +96,26 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
       }
 
       private initSelector() {
-        const {getState, dispatch} = this.store;
-        const sourceSelector = (state: PWState, props: {}) => ({});
-        this.selector = createSelector(sourceSelector, getState, this.props);
+        // const {getState, dispatch} = this.store;
+        // const sourceSelector = (state: TPWState, props: TOwnProps) => {
+        //   return Object.keys(connectors).map(s => connectors[s].select(state, props));
+        // };
+        this.selector = createSelector<TOwnProps>(connectors, this.store, this.props);
       }
 
       private initSubscription() {
         if (shouldHandleStateChanges) {
           const subscription = this.subscription = new Subscription(this.store, this.parentSub);
-          const dummyState = {} as ConnectState;
+          const notifyNestedSubs = subscription.notifyNestedSubs.bind(subscription);
+          const dummyState = {};
 
           subscription.setOnStateChange(() => {
             this.selector.run(this.props);
 
-            if (!this.selector.shouldComponentUpdate) {
-              subscription.notifyNestedSubs();
+            if (this.selector.shouldComponentUpdate) {
+              this.setState(dummyState, notifyNestedSubs);
             } else {
-              this.setState(dummyState, () => subscription.notifyNestedSubs());
+              notifyNestedSubs();
             }
           });
         }
@@ -144,7 +128,7 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
         if (selector.error) {
           throw selector.error;
         } else {
-          return <WrappedComponent ddd={1} />;
+          return <WrappedComponent {...this.props} {...this.selector.props} />;
         }
       }
     }
