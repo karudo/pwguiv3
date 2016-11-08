@@ -1,5 +1,5 @@
 import * as React from 'react';
-const {createElement, Component, PropTypes} = React;
+const {Component, PropTypes} = React;
 import _ from 'lodash';
 
 import {Store} from 'redux';
@@ -32,30 +32,6 @@ export class Connector {
 
   }
 }
-export class Connector1 {
-  constructor(public a: number) {
-
-  }
-}
-
-const z = {
-  qwe: () => new Connector(1),
-  zxc: () => new Connector1(6)
-};
-
-type TypeOfZ = {
-  qwe: () => Connector,
-  zxc: () => Connector1
-};
-
-type MapRes = {
-  qwe: Connector,
-  zxc: Connector1
-};
-
-//type d = (x: TypeOfZ): MapRes => x();
-const ccc: MapRes = _.mapValues(z, (x) => x());
-console.log(ccc)
 
 type ConnectorsObject = {
   [key: string]: Connector
@@ -67,7 +43,7 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
     shouldHandleStateChanges = true,
   } = settings;
 
-  const subscriptionKey = storeKey + 'Subscription';
+  const subscriptionKey = `${storeKey}Subscription`;
   const version = hotReloadingVersion++;
 
   // tslint:disable-next-line:only-arrow-functions
@@ -132,9 +108,9 @@ export function connect<ParentProps>(connectors: ConnectorsObject, settings: Con
         if (this.subscription) {
           this.subscription.tryUnsubscribe();
         }
-        this.subscription = null as any;
-        this.store = null as any;
-        this.parentSub = null as any;
+        this.subscription = undefined as any;
+        this.store = undefined as any;
+        this.parentSub = undefined as any;
         this.selector.run = () => ({});
       }
 

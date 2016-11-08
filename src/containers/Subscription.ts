@@ -59,8 +59,8 @@ function createListenerCollection(): ListenerCollection {
 }
 
 class Subscription {
-  private subscribe: ((arg: VoidFunction) => VoidFunction) | null;
-  private unsubscribe: VoidFunction | null;
+  private subscribe: ((arg: VoidFunction) => VoidFunction);
+  private unsubscribe: VoidFunction | undefined;
   private onStateChange: VoidFunction;
   private listeners: ListenerCollection;
 
@@ -68,7 +68,7 @@ class Subscription {
     this.subscribe = parentSub
       ? parentSub.addNestedSub.bind(parentSub)
       : store.subscribe.bind(store);
-    this.unsubscribe = null;
+    this.unsubscribe = undefined;
     this.listeners = createListenerCollection();
   }
 
@@ -90,7 +90,7 @@ class Subscription {
   }
 
   trySubscribe() {
-    if (!this.unsubscribe && this.subscribe) {
+    if (!this.unsubscribe) {
       this.unsubscribe = this.subscribe(this.onStateChange);
     }
   }
@@ -100,8 +100,8 @@ class Subscription {
       this.unsubscribe();
       this.listeners.clear();
     }
-    this.unsubscribe = null;
-    this.subscribe = null;
+    this.unsubscribe = undefined;
+    this.subscribe = undefined as any;
   }
 }
 
