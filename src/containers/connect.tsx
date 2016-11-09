@@ -12,14 +12,18 @@ import {createSelector, TypeSelector} from './createSelector';
 
 import {TPWStore, TConnectorsObject} from '../kernel/baseTypes';
 
-type ConnectSettings = {
+type TConnectSettings = {
   storeKey?: string,
   shouldHandleStateChanges?: boolean
 };
 
+type TConnectState = {
+  shouldComponentUpdate: boolean
+};
+
 let hotReloadingVersion = 0;
 
-export function connect<TOwnProps>(connectors: TConnectorsObject, settings: ConnectSettings = {}) {
+export function connect<TOwnProps>(connectors: TConnectorsObject, settings: TConnectSettings = {}) {
   const {
     storeKey = 'store',
     shouldHandleStateChanges = true,
@@ -30,7 +34,7 @@ export function connect<TOwnProps>(connectors: TConnectorsObject, settings: Conn
 
   // tslint:disable-next-line:only-arrow-functions
   return function wrapWithConnect(WrappedComponent: any) {
-    class Connect extends Component<TOwnProps, {}> {
+    class Connect extends Component<TOwnProps, TConnectState> {
       static contextTypes: any;
       static childContextTypes: any;
 
@@ -107,7 +111,7 @@ export function connect<TOwnProps>(connectors: TConnectorsObject, settings: Conn
         if (shouldHandleStateChanges) {
           const subscription = this.subscription = new Subscription(this.store, this.parentSub);
           const notifyNestedSubs = subscription.notifyNestedSubs.bind(subscription);
-          const dummyState = {};
+          const dummyState = {} as TConnectState;
 
           subscription.setOnStateChange(() => {
             this.selector.run(this.props);
