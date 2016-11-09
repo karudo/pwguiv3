@@ -4,12 +4,19 @@ export type TPWState = {};
 
 export type TPWStore = Store<TPWState>;
 
+export interface IBaseConnectedPropMeta {
+  ready: boolean; // ?
+  loading: boolean;
+}
+
 export interface IBaseActions {
   setData(data: any): any;
+  setMeta?(meta: IBaseConnectedPropMeta): IBaseConnectedPropMeta;
 }
 
 export interface IBaseConnectedProp {
   data: any;
+  meta?: IBaseConnectedPropMeta;
   actions: IBaseActions;
 }
 
