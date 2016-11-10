@@ -32,3 +32,26 @@ export function createSelector<TOwnProps>(
   };
   return selector;
 }
+
+interface ISelector {
+  pizda(): any;
+}
+
+type TCreateSelector = {
+  slice: string,
+  checkChanges: () => boolean,
+};
+
+export function creSel(s: TCreateSelector): void {
+  console.log(s.slice, s.checkChanges());
+}
+
+function connCollection(params: any) {
+  return function createSelector(getState: any, dispatch: any): ISelector {
+    return {
+      pizda() {
+        return 1;
+      }
+    };
+  };
+}
