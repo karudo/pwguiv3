@@ -1,3 +1,4 @@
+import {bindActionCreators} from 'redux';
 import {TConnectorsObject, TPWStore} from '../kernel/baseTypes';
 
 export type TypeSelector<TOwnProps> = {
@@ -34,24 +35,30 @@ export function createSelector<TOwnProps>(
 }
 
 interface ISelector {
-  pizda(): any;
+  run(props: any): any;
 }
 
-type TCreateSelector = {
-  slice: string,
-  checkChanges: () => boolean,
-};
 
-export function creSel(s: TCreateSelector): void {
-  console.log(s.slice, s.checkChanges());
-}
 
-function connCollection(params: any) {
+function createCollectionConnector<TOwnProps>(sliceName: string, convertFn: (item: any) => any) {
   return function createSelector(getState: any, dispatch: any): ISelector {
+
+    const actions = {
+      setData(x: any) {
+        dispatch(x);
+      }
+    };
+    let state: any = getState()[sliceName];
+    let data: any;
+    let meta: any;
     return {
-      pizda() {
-        return 1;
+      run(props: any) {
+
       }
     };
   };
+}
+
+function connCollection<TOwnProps>(convertData: (item: any) => any) {
+  return createCollectionConnector<TOwnProps>('collection', convertData);
 }
