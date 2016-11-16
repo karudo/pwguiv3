@@ -1837,8 +1837,8 @@ loader-utils@^0.2.11, loader-utils@^0.2.6, loader-utils@^0.2.7:
     object-assign "^4.0.1"
 
 lodash-es@^4.2.1:
-  version "4.17.1"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.1.tgz#f1f33c2c696ad1d3e19fc8b2bd10f61ebafc2238"
+  version "4.17.2"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.2.tgz#59011b585166e613eb9dd5fc256b2cd1a30f3712"
 
 lodash._arraycopy@^3.0.0:
   version "3.0.0"
@@ -1909,9 +1909,9 @@ lodash.keys@^3.0.0:
     lodash.isarguments "^3.0.0"
     lodash.isarray "^3.0.0"
 
-lodash@^4.16.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.6.1, lodash@4.17.1:
-  version "4.17.1"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.1.tgz#e75eaf17a34730c6491d9956f4d81f3a044f01bf"
+lodash@^4.16.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.6.1, lodash@4.17.2:
+  version "4.17.2"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
 longest@^1.0.1:
   version "1.0.1"
